@@ -13,7 +13,7 @@ import (
 	"github.com/shwetaap/webservice/server/handlers"
 )
 
-// initialize function starts the webserver
+// initializeRouter function sets the Router
 func initializeRouter() *mux.Router {
 	l := log.New(os.Stdout, "server-log ", log.LstdFlags)
 	//serverhandler = handlers.

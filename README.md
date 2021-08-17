@@ -28,10 +28,10 @@ Data is stored in memory using the Object Strut. These Objects are distributed a
  > curl localhost:8080/objects/1/2 -X PUT -d '{"data":"sec"}' -v
 
 5. Get data
- > curl localhost:8080/objects/1/2
+ > curl localhost:8080/objects/1/2 -v
 
 6. Delete Data
- > curl localhost:8080/objects/1/2 -X DELETE
+ > curl localhost:8080/objects/1/2 -X DELETE -v
 
 ---
 ## Unit Test Execution
