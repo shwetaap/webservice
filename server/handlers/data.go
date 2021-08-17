@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -73,13 +74,17 @@ func (o *Objects) UpdateObject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 	}
-
+	obj.ID = objID
 	err = data.UpdateObject(objID, bucket, obj)
 	if err == data.ErrNotFound {
 		http.Error(w, "Object not found", http.StatusNotFound)
 		return
 	}
-
+	output := "{id: " + vars["objectID"] + " }"
+	resp, _ := json.Marshal(output)
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8") // normal header
+	w.WriteHeader(http.StatusCreated)
+	w.Write(resp)
 }
 
 // DeleteObject deletes the object listed in the HTTP DELETE Request

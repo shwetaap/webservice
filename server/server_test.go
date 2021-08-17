@@ -33,6 +33,39 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 	}
 }
 
+func TestGetObjectBadRequest(t *testing.T) {
+
+	l := log.New(os.Stdout, "server-test-get-bad-request ", log.LstdFlags)
+	serverhandler := handlers.NewObjects(l)
+	req, _ := http.NewRequest("GET", "/objects/sad/asd", nil)
+	router := mux.NewRouter()
+	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.GetObject).Methods("GET")
+	response := executeRequest(req, router)
+	checkResponseCode(t, http.StatusNotFound, response.Code)
+}
+
+func TestDeleteObjectBadRequest(t *testing.T) {
+
+	l := log.New(os.Stdout, "server-test-delete-bad-request ", log.LstdFlags)
+	serverhandler := handlers.NewObjects(l)
+	req, _ := http.NewRequest("DELETE", "/objects/sad/asd", nil)
+	router := mux.NewRouter()
+	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.DeleteObject).Methods("DELETE")
+	response := executeRequest(req, router)
+	checkResponseCode(t, http.StatusNotFound, response.Code)
+}
+
+func TestUpdateObjectBadRequest(t *testing.T) {
+
+	l := log.New(os.Stdout, "server-test-update-bad-request ", log.LstdFlags)
+	serverhandler := handlers.NewObjects(l)
+	req, _ := http.NewRequest("PUT", "/objects/sad/asd", nil)
+	router := mux.NewRouter()
+	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.UpdateObject).Methods("PUT")
+	response := executeRequest(req, router)
+	checkResponseCode(t, http.StatusNotFound, response.Code)
+}
+
 func TestGetObjectEmpty(t *testing.T) {
 
 	l := log.New(os.Stdout, "server-test-get-empty-object", log.LstdFlags)
@@ -68,7 +101,7 @@ func TestUpdateObject(t *testing.T) {
 	router := mux.NewRouter()
 	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.UpdateObject).Methods("PUT")
 	response := executeRequest(req, router)
-	checkResponseCode(t, http.StatusOK, response.Code)
+	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	// Get the newly added data
 	req, _ = http.NewRequest("GET", "/objects/0/1", nil)
@@ -88,7 +121,7 @@ func TestDeleteExistingObject(t *testing.T) {
 	router := mux.NewRouter()
 	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.UpdateObject).Methods("PUT")
 	response := executeRequest(req, router)
-	checkResponseCode(t, http.StatusOK, response.Code)
+	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	// Get the newly added data
 	req, _ = http.NewRequest("GET", "/objects/0/1", nil)
@@ -121,5 +154,4 @@ func TestDeleteNonExistingObject(t *testing.T) {
 	router.HandleFunc("/objects/{bucket:[0-9]}/{objectID:[0-9]+}", serverhandler.DeleteObject).Methods("DELETE")
 	response := executeRequest(req, router)
 	checkResponseCode(t, http.StatusNotFound, response.Code)
-
 }

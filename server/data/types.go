@@ -18,8 +18,6 @@ type Object struct {
 // Bucket holds multiple objects
 var Bucket []*Object
 
-var ObjectMap = make(map[Object]int)
-
 // Buckets is a slice of multiple buckets
 var Buckets [][]*Object
 

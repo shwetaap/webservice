@@ -11,7 +11,7 @@ import (
 
 // initialize function starts the webserver
 func initialize(port string) {
-	l := log.New(os.Stdout, "server-log", log.LstdFlags)
+	l := log.New(os.Stdout, "server-log ", log.LstdFlags)
 	//serverhandler = handlers.
 	serverhandler := handlers.NewObjects(l)
 	router := mux.NewRouter()
